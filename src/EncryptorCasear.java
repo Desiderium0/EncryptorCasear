@@ -1,16 +1,68 @@
+import java.util.Random;
 import java.util.Scanner;
 
 public class EncryptorCasear {
+
+    private static String[] _message = new String[] 
+    {
+        "Hello", "What your name", "Lets go",
+        "I have a bread", "Money", "Get out please",
+        "Not laught", "Cat", "Dog"
+    };
+
     public static void main(String[] args)
     {
         while (true)
         {
-            System.out.print("Введите сообщение: ");
             Scanner scanner = new Scanner(System.in);
-            String message = scanner.nextLine();
+            Random random = new Random();
 
-            Encrypt(message, 2);
-            System.out.println();
+            System.out.println("\nВыберите действие:");
+            System.out.println("1. Выход");
+            System.out.println("2. Ввести сообщение вручную");
+            System.out.println("3. Сгенерировать случайное сообщение");
+            System.out.println("4. Очистить консоль");
+            System.out.print("Ваш выбор: ");
+
+            int input = scanner.nextInt();
+            
+            if (input < 1 || input > 4) {
+                System.out.println("Некорректный ввод. Пожалуйста, введите число от 1 до 4.");
+                continue; // Переход к следующей итерации цикла
+            }
+
+            int step;
+
+            switch (input) {
+                case 1:
+                    System.out.println("Выход из программы.");
+                    return;
+                case 2: // Ввод пользователем
+                    System.out.print("Введите сообщение: ");
+                    String message = scanner.next();
+
+                    System.out.print("Выберете шаг сдвига: ");
+                    step = scanner.nextInt();
+
+                    Encrypt(message, step);
+                    System.out.println();
+                    break;
+                case 3: // Рандомный ввод
+                    String rndMessage = _message[random.nextInt(8)];
+                    System.out.println("Рандомное слово: " + rndMessage);
+
+                    System.out.print("Выберете шаг сдвига: ");
+                    step = scanner.nextInt();
+
+                    Encrypt(rndMessage, step);
+                    System.out.println();
+                    break;
+                case 4: // Очистка консоли
+                    System.out.print("\033[H\033[2J");
+                    System.out.flush();
+                    break;
+            }
+            
         }
     }
 
@@ -65,7 +117,7 @@ public class EncryptorCasear {
             }
             else
             {
-                System.out.println("\n\tВы ввели часть сообщения или все не относящееся к латынице!"); 
+                System.out.println(" [знак не латынь] "); 
                 break;
             }                  
         }
