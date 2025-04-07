@@ -10,6 +10,12 @@ public class EncryptorCasear {
         "Not laught", "Cat", "Dog"
     };
 
+    public static String RndMessage;
+    public static String PrMessage;
+    public static String Result;
+    public static int Step;
+
+
     public static void main(String[] args)
     {
         while (true)
@@ -18,46 +24,88 @@ public class EncryptorCasear {
             Random random = new Random();
 
             System.out.println("\nВыберите действие:");
-            System.out.println("1. Выход");
-            System.out.println("2. Ввести сообщение вручную");
-            System.out.println("3. Сгенерировать случайное сообщение");
-            System.out.println("4. Очистить консоль");
+            System.out.println("1. Ввод исходных данных, как вручную, так и сгенерированных случайным образом");
+            System.out.println("2. Выполнение алгоритма по заданию");
+            System.out.println("3. Вывод результата");
+            System.out.println("4. Завершение работы программы.");
+            System.out.println("5. Очистить консоль");
             System.out.print("Ваш выбор: ");
-
             int input = scanner.nextInt();
+            System.out.println();
             
-            if (input < 1 || input > 4) {
-                System.out.println("Некорректный ввод. Пожалуйста, введите число от 1 до 4.");
+            if (input < 1 || input > 5) {
+                System.out.println("Некорректный ввод. Пожалуйста, введите число от 1 до 5.");
                 continue; // Переход к следующей итерации цикла
             }
 
-            int step;
-
             switch (input) {
-                case 1:
+                case 1: // Ввод пользователем или случайно
+                    System.out.println("1. Случайно");
+                    System.out.println("2. Вручную");
+                    System.out.print("Ваш выбор: ");
+                    int num = scanner.nextInt();
+                    System.out.println();
+
+                    if (num == 1)
+                    {
+                        RndMessage = null;
+                        RndMessage = _message[random.nextInt(8)];
+                        System.out.println("Случайное слово: " + RndMessage);
+
+                        System.out.print("Выберете шаг сдвига: ");
+                        Step = scanner.nextInt();
+
+                        System.out.println();
+                        break;
+                    }
+                    else if (num == 2)
+                    {
+                        PrMessage = null;
+                        System.out.print("Введите сообщение: ");
+                        PrMessage = scanner.next();
+    
+                        System.out.print("Выберете шаг сдвига: ");
+                        Step = scanner.nextInt();
+    
+                        System.out.println();
+                        break;
+                    }
+                    else
+                    {
+                        System.out.println("Некорректный ввод. Пожалуйста, введите число 1 или 2.");
+                        System.out.println("Возврат в меню...");
+                        continue;   
+                    }
+                case 2:
+                if (PrMessage != null)
+                {
+                    Result = Encrypt(PrMessage, Step);
+                    System.out.println("Шифрование завершено!");
+                    break;
+                }
+                else if (RndMessage != null)
+                {
+                    Result = Encrypt(RndMessage, Step);
+                    System.out.println("Шифрование завершено!");
+                    break;
+                }
+                else
+                {
+                    System.out.println("Шифрования не было произведено!");
+                }
+                break;
+                case 3:
+                    if (Result == null) {
+                        Result = "///Пусто///";
+                    }
+                    System.out.println("====================================");
+                    System.out.println("Вывод результата: " + Result);
+                    System.out.println("====================================");
+                    break;
+                case 4:
                     System.out.println("Выход из программы.");
                     return;
-                case 2: // Ввод пользователем
-                    System.out.print("Введите сообщение: ");
-                    String message = scanner.next();
-
-                    System.out.print("Выберете шаг сдвига: ");
-                    step = scanner.nextInt();
-
-                    Encrypt(message, step);
-                    System.out.println();
-                    break;
-                case 3: // Рандомный ввод
-                    String rndMessage = _message[random.nextInt(8)];
-                    System.out.println("Рандомное слово: " + rndMessage);
-
-                    System.out.print("Выберете шаг сдвига: ");
-                    step = scanner.nextInt();
-
-                    Encrypt(rndMessage, step);
-                    System.out.println();
-                    break;
-                case 4: // Очистка консоли
+                case 5: // Очистка консоли
                     System.out.print("\033[H\033[2J");
                     System.out.flush();
                     break;
@@ -66,10 +114,10 @@ public class EncryptorCasear {
         }
     }
 
-    public static void Encrypt(String message, int step) // Метод содержит парметры для сообщения и шага изменения символа
+    public static String Encrypt(String message, int step) // Метод содержит парметры для сообщения и шага изменения символа
     {
         char[] messageChars = message.toCharArray();     // Превращаем всё сообщение в массив знаков для дальнейшего из изменения при помощи шага
-        System.out.print("Ваше зашифрованное слово: ");
+        String result = "";
         for (char ch : messageChars)
         {
             int numChar = (int)ch;
@@ -91,7 +139,7 @@ public class EncryptorCasear {
                         numChar = 97 + step;
                     } 
                 }
-                System.out.print((char)numChar);
+                result += (char)numChar;
             }
             else if (numChar <= 90 && numChar >= 65)                /////////// Проверка диапозона для заглавных букв
             {
@@ -109,19 +157,18 @@ public class EncryptorCasear {
                         numChar = 65 + step;
                     }
                 }
-                System.out.print((char)numChar);
+                result += (char)numChar;
             }
             else if (numChar == 32) // Для пробела сделал типо исключения чтобы можно было писать нормальные предложения, но и знаки можно добавить к примеру [,;-./!?]
             {
-                System.out.print(" ");
+                result += (char)32; // " " - пробел
             }
-            else
+            else // Если знак относится не к лаытни то выведется это сообщение и закроет foreach
             {
-                System.out.println(" [знак не латынь] "); 
+                System.out.println(" [Сообщение не на латыне] "); 
                 break;
             }                  
         }
+        return result;
     }
 } 
-
-// Я пришел с миром из .NET разработки :D
