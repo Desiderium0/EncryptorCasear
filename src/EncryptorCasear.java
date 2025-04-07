@@ -5,9 +5,9 @@ public class EncryptorCasear {
 
     private static String[] _message = new String[] 
     {
-        "Hello", "What your name", "Lets go",
-        "I have a bread", "Money", "Get out please",
-        "Not laught", "Cat", "Dog"
+        "Hello!", "What your name?", "Lets go!",
+        "I have a bread!", "Money.", "Get out please.",
+        "Not, laught!", "Cat.", "Dog."
     };
 
     public static String RndMessage;
@@ -28,13 +28,13 @@ public class EncryptorCasear {
             System.out.println("2. Выполнение алгоритма по заданию");
             System.out.println("3. Вывод результата");
             System.out.println("4. Завершение работы программы.");
-            System.out.println("5. Очистить консоль");
             System.out.print("Ваш выбор: ");
             int input = scanner.nextInt();
+            scanner.nextLine();
             System.out.println();
             
             if (input < 1 || input > 5) {
-                System.out.println("Некорректный ввод. Пожалуйста, введите число от 1 до 5.");
+                System.out.println("Некорректный ввод. Пожалуйста, введите число от 1 до 4.");
                 continue; // Переход к следующей итерации цикла
             }
 
@@ -44,6 +44,7 @@ public class EncryptorCasear {
                     System.out.println("2. Вручную");
                     System.out.print("Ваш выбор: ");
                     int num = scanner.nextInt();
+                    scanner.nextLine();
                     System.out.println();
 
                     if (num == 1)
@@ -62,8 +63,8 @@ public class EncryptorCasear {
                     {
                         PrMessage = null;
                         System.out.print("Введите сообщение: ");
-                        PrMessage = scanner.next();
-    
+                        PrMessage = scanner.nextLine();
+                        
                         System.out.print("Выберете шаг сдвига: ");
                         Step = scanner.nextInt();
     
@@ -105,12 +106,7 @@ public class EncryptorCasear {
                 case 4:
                     System.out.println("Выход из программы.");
                     return;
-                case 5: // Очистка консоли
-                    System.out.print("\033[H\033[2J");
-                    System.out.flush();
-                    break;
             }
-            
         }
     }
 
@@ -159,14 +155,33 @@ public class EncryptorCasear {
                 }
                 result += (char)numChar;
             }
-            else if (numChar == 32) // Для пробела сделал типо исключения чтобы можно было писать нормальные предложения, но и знаки можно добавить к примеру [,;-./!?]
+            else 
             {
-                result += (char)32; // " " - пробел
-            }
-            else // Если знак относится не к лаытни то выведется это сообщение и закроет foreach
-            {
-                System.out.println(" [Сообщение не на латыне] "); 
-                break;
+                if (numChar == 32)
+                { 
+                    result += (char)32; // " " - пробел
+                }
+                else if (numChar == 33)
+                {
+                    result += (char)33; // '!' - восклицательный знак
+                }
+                else if (numChar == 63)
+                {
+                    result += (char)63; // '?' - вопросительный знак
+                }
+                else if (numChar == 46)
+                {
+                    result += (char)46; // '.' - точка
+                }
+                else if (numChar == 44)
+                {
+                    result += (char)44; // ',' - запятая
+                }
+                else // Если знак относится не к лаытни то выведется это сообщение и закроет foreach
+                {
+                    System.out.println(" [Сообщение не на латыне] "); 
+                    break;
+                }
             }                  
         }
         return result;
