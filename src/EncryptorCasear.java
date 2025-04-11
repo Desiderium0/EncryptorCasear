@@ -40,6 +40,7 @@ public class EncryptorCasear {
 
             switch (input) {
                 case 1: // Ввод пользователем или случайно
+                    Result = null;
                     System.out.println("1. Случайно");
                     System.out.println("2. Вручную");
                     System.out.print("Ваш выбор: ");
